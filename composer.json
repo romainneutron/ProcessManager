@@ -1,0 +1,26 @@
+{
+    "name": "neutron/process-manager",
+    "type": "library",
+    "description": "",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Romain Neutron",
+            "email": "imprec@gmail.com",
+            "homepage": "http://www.lickmychip.com/"
+        }
+    ],
+    "require": {
+        "php"                      : ">=5.3.3",
+        "symfony/process"          : "2.4.x-dev@dev"
+    },
+    "require-dev": {
+        "sami/sami"       : "~1.0",
+        "phpunit/phpunit" : "~3.7"
+    },
+    "autoload": {
+        "psr-0": {
+            "Neutron": "src"
+        }
+    }
+}
