@@ -294,6 +294,7 @@ class ProcessManager implements \Countable
 
         $process = $this->processes[$name];
         $process->stop($timeout, $signal);
+        $this->log('notice', sprintf('Process %s stopped.', $name));
         unset($this->processes[$name]);
 
         return $process;
