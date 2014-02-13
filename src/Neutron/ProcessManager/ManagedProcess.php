@@ -15,7 +15,7 @@ class ManagedProcess
     /** @var integer */
     private $initialExecutions;
     /** @var array */
-    private $failures = array();
+    private $failures = 0;
     /** @var Boolean */
     private $hasRun = false;
 
@@ -90,7 +90,7 @@ class ManagedProcess
     {
         $this->hasRun = false;
         $this->executions = $this->initialExecutions;
-        $this->failures = array();
+        $this->failures = 0;
 
         return $this;
     }
@@ -118,25 +118,23 @@ class ManagedProcess
     }
 
     /**
-     * Adds an execution failure.
-     *
-     * @param \Exception $e
+     * Increments execution failure.
      *
      * @return ManagedProcess
      */
-    public function addFailure(\Exception $e)
+    public function incrementFailures()
     {
-        $this->failures[] = $e;
+        $this->failures++;
 
         return $this;
     }
 
     /**
-     * Returns execution failures.
+     * Returns execution failures count.
      *
-     * @return \Exception[]
+     * @return integer
      */
-    public function getFailures()
+    public function getFailuresCount()
     {
         return $this->failures;
     }

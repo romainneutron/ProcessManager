@@ -102,11 +102,11 @@ class ManagedProcessTest extends ProcessableTestCase
     {
         $process = new ManagedProcess($this->createProcessMock(), 4);
         $process->run();
-        $process->addFailure(new \Exception('failure'));
+        $process->incrementFailures();
         $process->reset();
 
         $this->assertEquals(4, $process->getExecutions());
-        $this->assertEquals(array(), $process->getFailures());
+        $this->assertEquals(0, $process->getFailuresCount());
         $this->assertFalse($process->hasRun());
     }
 
@@ -141,13 +141,11 @@ class ManagedProcessTest extends ProcessableTestCase
     public function testFailuresGetterAndSetters()
     {
         $process = new ManagedProcess($this->createProcessMock());
-        $this->assertEquals(array(), $process->getFailures());
-        $exception1 = new \Exception('failure #1');
-        $process->addFailure($exception1);
-        $this->assertSame(array($exception1), $process->getFailures());
-        $exception2 = new \Exception('failure #2');
-        $process->addFailure($exception2);
-        $this->assertSame(array($exception1, $exception2), $process->getFailures());
+        $this->assertEquals(0, $process->getFailuresCount());
+        $process->incrementFailures();
+        $this->assertSame(1, $process->getFailuresCount());
+        $process->incrementFailures();
+        $this->assertSame(2, $process->getFailuresCount());
     }
 
     public function testManagedProcessGetters()

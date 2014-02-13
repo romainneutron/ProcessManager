@@ -528,7 +528,7 @@ class ProcessManager implements \Countable
             if (!$process->isRunning()) {
                 if ($process->hasRun() && !$process->isSuccessful()) {
                     $this->addFailureToProcess($process, new ProcessFailedException($process->getManagedProcess()), $this->failureStrategy);
-                    $this->log('error', sprintf('Process %s failed.', $name, count($process->getFailures())), array('exception' => new ProcessFailedException($process->getManagedProcess())));
+                    $this->log('error', sprintf('Process %s failed.', $name, $process->getFailuresCount()), array('exception' => new ProcessFailedException($process->getManagedProcess())));
                 }
                 if (false === $this->isStopping() && $process->canRun()) {
                     $this->doExecute($process, 'start', array($callback));
@@ -608,7 +608,7 @@ class ProcessManager implements \Countable
      */
     private function addFailureToProcess($process, $e, $strategy)
     {
-        $process->addFailure($e);
+        $process->incrementFailures();
         if (static::STRATEGY_RETRY === $strategy) {
             $process->retry();
         }

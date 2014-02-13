@@ -453,7 +453,7 @@ class ProcessManagerTest extends ProcessableTestCase
             $process->setTimeout($timeout);
             $n++;
         }
-        $this->assertNotEmpty($manager->get('test')->getFailures());
+        $this->assertEquals(0, $manager->get('test')->getFailuresCount());
         $this->assertTrue($manager->isSuccessful());
     }
 
