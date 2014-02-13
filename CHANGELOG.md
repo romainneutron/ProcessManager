@@ -1,6 +1,11 @@
 CHANGELOG
 ---------
 
+* 2.0.0 (2014-xx-xx)
+
+  * Add better log messages.
+  * Remove failure storage to avoid memory leaks.
+
 * 1.0.1 (2013-12-03)
 
   * Add compatibility with Symfony 2.4.0.
