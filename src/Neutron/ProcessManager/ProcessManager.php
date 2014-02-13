@@ -520,20 +520,18 @@ class ProcessManager implements \Countable
             }
 
             if ($process->isRunning()) {
-                if ($this->doExecute($process, 'checkTimeout', array(), 'Managed process timed-out.')) {
+                if ($this->doExecute($process, 'checkTimeout', array())) {
                     $concurrent++;
-                } else {
-                    $this->log('info', sprintf('Process %s timed-out.', $name));
                 }
             }
 
             if (!$process->isRunning()) {
                 if ($process->hasRun() && !$process->isSuccessful()) {
                     $this->addFailureToProcess($process, new ProcessFailedException($process->getManagedProcess()), $this->failureStrategy);
-                    $this->log('error', sprintf('Process %s failed. (failure #%d)', $name, count($process->getFailures())));
+                    $this->log('error', sprintf('Process %s failed.', $name, count($process->getFailures())), array('exception' => new ProcessFailedException($process->getManagedProcess())));
                 }
                 if (false === $this->isStopping() && $process->canRun()) {
-                    $this->doExecute($process, 'start', array($callback), 'Unable to start the managed process.');
+                    $this->doExecute($process, 'start', array($callback));
                     $concurrent++;
                     $this->log('notice', sprintf('Process %s started.', $name));
                 }
@@ -561,16 +559,16 @@ class ProcessManager implements \Countable
      *
      * @return Booleans True if the method call was successful, false otherwise.
      */
-    private function doExecute(ManagedProcess $process, $method, $args = array(), $errorMsg = '')
+    private function doExecute(ManagedProcess $process, $method, array $args)
     {
         try {
             call_user_func_array(array($process, $method), $args);
 
             return true;
         } catch (ProcessTimedOutException $e) {
-            $this->handleException($process, $e, $errorMsg, $this->timeoutStrategy);
+            $this->handleException($process, $e, 'Managed process timed-out.', $this->timeoutStrategy);
         } catch (ProcessException $e) {
-            $this->handleException($process, $e, $errorMsg, $this->failureStrategy);
+            $this->handleException($process, $e, 'Unable to start the managed process.', $this->failureStrategy);
         }
 
         return false;
@@ -590,7 +588,7 @@ class ProcessManager implements \Countable
      */
     private function handleException(ManagedProcess $process, \Exception $e, $errorMsg, $strategy)
     {
-        $this->log('error', $errorMsg, array('error' => $e));
+        $this->log('error', $errorMsg, array('exception' => $e));
 
         if (static::STRATEGY_ABORT === $strategy) {
             $this->stop();
