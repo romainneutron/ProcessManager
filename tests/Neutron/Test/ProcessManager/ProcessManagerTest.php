@@ -13,13 +13,14 @@ class ProcessManagerTest extends ProcessableTestCase
      */
     public function testInvalidConstructorArguments($logger, $parallel, $timeoutStrategy, $failureStrategy, $errorMsg)
     {
-        $this->setExpectedException('\InvalidArgumentException', $errorMsg);
+        $this->expectException('\InvalidArgumentException');
+        $this->expectExceptionMessage($errorMsg);
         new ProcessManager($logger, $parallel, $timeoutStrategy, $failureStrategy);
     }
 
     public function provideInvalidConstructionArguments()
     {
-        $logger = $this->getMock('Psr\Log\LoggerInterface');
+        $logger = $this->createMock('Psr\Log\LoggerInterface');
 
         return array(
             array($logger, 24, ProcessManager::STRATEGY_ABORT, 'invalid', 'Invalid strategy.'),
@@ -31,7 +32,7 @@ class ProcessManagerTest extends ProcessableTestCase
 
     public function testConstructorArguments()
     {
-        $logger = $this->getMock('Psr\Log\LoggerInterface');
+        $logger = $this->createMock('Psr\Log\LoggerInterface');
         $manager = new ProcessManager($logger);
 
         $this->assertSame($logger, $manager->getLogger());
@@ -63,7 +64,7 @@ class ProcessManagerTest extends ProcessableTestCase
 
     public function testLoggerGetterAndSetter()
     {
-        $logger = $this->getMock('Psr\Log\LoggerInterface');
+        $logger = $this->createMock('Psr\Log\LoggerInterface');
 
         $manager = new ProcessManager();
         $manager->setLogger($logger);
@@ -375,7 +376,8 @@ class ProcessManagerTest extends ProcessableTestCase
         $manager->add(new Process('php -r "echo(\'hello\');"'));
         $manager->add(new Process('php -r "echo(\'hello\');"'));
         $manager->add($process);
-        $this->setExpectedException('Neutron\ProcessManager\Exception\ProcessManagerException', 'Managed process timed-out.');
+        $this->expectException('Neutron\ProcessManager\Exception\ProcessManagerException');
+        $this->expectExceptionMessage('Managed process timed-out.');
         $manager->run();
         $this->assertFalse($manager->isSuccessful());
     }
@@ -436,7 +438,7 @@ class ProcessManagerTest extends ProcessableTestCase
 
     public function testIsSuccessfulIfAProcessTimeOutWithRetryStrategyAndFinallySucceed()
     {
-        $timeout = 0.1;
+        $timeout = 0.3;
         $process = new Process('php -r "usleep(200000);"');
         $process->setTimeout($timeout);
 

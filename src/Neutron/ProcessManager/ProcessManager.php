@@ -373,6 +373,7 @@ class ProcessManager implements \Countable
         while ($this->status !== static::STATUS_TERMINATED) {
             $this->updateProcesses($callback);
             usleep(10000);
+            pcntl_signal_dispatch();
         }
     }
 
