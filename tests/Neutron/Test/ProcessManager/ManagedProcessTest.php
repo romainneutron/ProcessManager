@@ -174,7 +174,8 @@ class ManagedProcessTest extends ProcessableTestCase
     {
         $process = new ManagedProcess($this->createProcessMock());
         call_user_func(array($process, $runMethod));
-        $this->setExpectedException('Symfony\Component\Process\Exception\RuntimeException', 'No remaining executions for the managed process.');
+        $this->expectException('Symfony\Component\Process\Exception\RuntimeException');
+        $this->expectExceptionMessage('No remaining executions for the managed process.');
         call_user_func(array($process, $runMethod));
     }
 

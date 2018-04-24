@@ -3,8 +3,9 @@
 namespace Neutron\Test\ProcessManager;
 
 use Symfony\Component\Process\Process;
+use \PHPUnit\Framework\TestCase;
 
-abstract class ProcessableTestCase extends \PHPUnit_Framework_TestCase
+abstract class ProcessableTestCase extends TestCase
 {
     public function testStopWithTimeoutIsActuallyWorking()
     {
