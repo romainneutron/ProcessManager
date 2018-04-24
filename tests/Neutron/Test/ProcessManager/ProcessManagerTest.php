@@ -438,7 +438,7 @@ class ProcessManagerTest extends ProcessableTestCase
 
     public function testIsSuccessfulIfAProcessTimeOutWithRetryStrategyAndFinallySucceed()
     {
-        $timeout = 0.1;
+        $timeout = 0.3;
         $process = new Process('php -r "usleep(200000);"');
         $process->setTimeout($timeout);
 
